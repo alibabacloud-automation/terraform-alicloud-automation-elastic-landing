@@ -1,0 +1,8 @@
+bases:
+- ../../base
+patchesStrategicMerge:
+- deployment.yaml
+images:
+- name: registry.cn-hangzhou.aliyuncs.com/acs/rollouts-demo
+  newName: registry.cn-hangzhou.aliyuncs.com/acs/rollouts-demo
+  newTag: blue

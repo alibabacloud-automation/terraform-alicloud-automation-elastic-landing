@@ -1,0 +1,69 @@
+resource "argocd_application" "appcenter" {
+  depends_on = [module.kubectl]
+  count      = var.application_number
+  metadata {
+    name      = "appcenter-demo-${count.index}"
+    namespace = "argocd"
+    labels = {
+      test = "true"
+    }
+  }
+
+  spec {
+    project = "default"
+
+    source {
+      repo_url        = var.application_url
+      path            = var.application_path
+      target_revision = var.application_target_revision
+      kustomize {
+        name_prefix = "foo-"
+        name_suffix = "-bar-${count.index}"
+        images      = ["hashicorp/terraform:light"]
+        common_labels = {
+          "this.is.a.common" = "la-bel"
+          "another.io/one"   = "true"
+        }
+      }
+    }
+
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = "argocd"
+    }
+
+    sync_policy {
+      automated = {
+        prune       = true
+        self_heal   = true
+        allow_empty = true
+      }
+      # Only available from ArgoCD 1.5.0 onwards
+      sync_options = ["Validate=false"]
+      retry {
+        limit = "5"
+        backoff = {
+          duration     = "30s"
+          max_duration = "2m"
+          factor       = "2"
+        }
+      }
+    }
+
+    ignore_difference {
+      group         = "apps"
+      kind          = "Deployment"
+      json_pointers = ["/spec/replicas"]
+    }
+
+    ignore_difference {
+      group = "apps"
+      kind  = "StatefulSet"
+      name  = "someStatefulSet"
+      json_pointers = [
+        "/spec/replicas",
+        "/spec/template/spec/metadata/labels/bar",
+      ]
+    }
+  }
+}

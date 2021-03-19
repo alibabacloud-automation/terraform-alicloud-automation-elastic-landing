@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo
+  labels:
+    app: demo
+spec:
+  rules:
+    - host: app.demo-kustomize.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: demo-svc
+              servicePort: 80
