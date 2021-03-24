@@ -39,7 +39,7 @@ resource "null_resource" "apply-argocd" {
   // The argocd resource requires the argocd config like server addr,auto password when terraform init.
   // Once the addr and password has been generated, the argocd resource can be run successfully.
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
   provisioner "local-exec" {
     command = <<EOF
