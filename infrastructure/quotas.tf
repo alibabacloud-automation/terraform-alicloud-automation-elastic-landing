@@ -40,54 +40,53 @@ resource "alicloud_quotas_quota_application" "slb-attaching-ecs" {
   quota_action_code = "q_fh20b0"
   reason            = "Used to auto scaling kubernetes node pools"
 }
-//resource "alicloud_quotas_quota_alarm" "slb-attaching-ecs" {
-//  count             = length(data.alicloud_quotas_quotas.slb-attaching-ecs.quotas) > 0 ? 1 : 0
-//  quota_alarm_name  = "slb-attaching-ecs-for-kubernetes"
-//  product_code      = "slb"
-//  quota_action_code = "q_fh20b0"
-//  threshold         = data.alicloud_quotas_quotas.slb-attaching-ecs.quotas.0.total_quota / 2
-//}
+resource "alicloud_quotas_quota_alarm" "slb-attaching-ecs" {
+  count             = length(data.alicloud_quotas_quotas.slb-attaching-ecs.quotas) > 0 ? 1 : 0
+  quota_alarm_name  = "slb-attaching-ecs-for-kubernetes"
+  product_code      = "slb"
+  quota_action_code = "q_fh20b0"
+  threshold         = data.alicloud_quotas_quotas.slb-attaching-ecs.quotas.0.total_quota / 2
+}
 
-//data "alicloud_quotas_quotas" "slb-attaching-listener" {
-//  product_code      = "slb"
-//  quota_action_code = "q_2xnnv6"
-//}
-//resource "alicloud_quotas_quota_application" "slb-attaching-listener" {
-//  count             = length(data.alicloud_quotas_quotas.slb-attaching-listener.quotas) > 0 ? data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_usage > data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota / 2 ? 1 : 0 : 0
-//  notice_type       = local.quota_notice_type
-//  desire_value      = 2 * data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota
-//  product_code      = "slb"
-//  quota_action_code = "q_2xnnv6"
-//  reason            = "Used to auto scaling kubernetes node pools"
-//}
-//resource "alicloud_quotas_quota_alarm" "slb-attaching-listener" {
-//  count             = length(data.alicloud_quotas_quotas.slb-attaching-listener.quotas) > 0 ? 1 : 0
-//  quota_alarm_name  = "slb-attaching-listener-for-kubernetes"
-//  product_code      = "slb"
-//  quota_action_code = "q_2xnnv6"
-//  threshold         = data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota / 2
-//}
+data "alicloud_quotas_quotas" "slb-attaching-listener" {
+  product_code      = "slb"
+  quota_action_code = "q_2xnnv6"
+}
+resource "alicloud_quotas_quota_application" "slb-attaching-listener" {
+  count             = length(data.alicloud_quotas_quotas.slb-attaching-listener.quotas) > 0 ? data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_usage > data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota / 2 ? 1 : 0 : 0
+  notice_type       = local.quota_notice_type
+  desire_value      = 2 * data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota
+  product_code      = "slb"
+  quota_action_code = "q_2xnnv6"
+  reason            = "Used to auto scaling kubernetes node pools"
+}
+resource "alicloud_quotas_quota_alarm" "slb-attaching-listener" {
+  count             = length(data.alicloud_quotas_quotas.slb-attaching-listener.quotas) > 0 ? 1 : 0
+  quota_alarm_name  = "slb-attaching-listener-for-kubernetes"
+  product_code      = "slb"
+  quota_action_code = "q_2xnnv6"
+  threshold         = data.alicloud_quotas_quotas.slb-attaching-listener.quotas.0.total_quota / 2
+}
 
 data "alicloud_quotas_quotas" "slb-instances" {
   product_code      = "slb"
   quota_action_code = "q_3mmbsp"
 }
-//resource "alicloud_quotas_quota_application" "slb-instances" {
-//  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? data.alicloud_quotas_quotas.slb-instances.quotas.0.total_usage > data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2 ? 1 : 0 : 0
-//  notice_type       = local.quota_notice_type
-//  desire_value      = 2 * data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota
-//  product_code      = "slb"
-//  quota_action_code = "q_3mmbsp"
-//  reason            = "Used to auto scaling kubernetes node pools"
-//}
-//resource "alicloud_quotas_quota_alarm" "slb-instances" {
-//  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? 1 : 0
-//  quota_alarm_name  = "slb-instances-for-kubernetes"
-//  product_code      = "slb"
-//  quota_action_code = "q_3mmbsp"
-//  threshold         = data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2
-//}
-
+resource "alicloud_quotas_quota_application" "slb-instances" {
+  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? data.alicloud_quotas_quotas.slb-instances.quotas.0.total_usage > data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2 ? 1 : 0 : 0
+  notice_type       = local.quota_notice_type
+  desire_value      = 2 * data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota
+  product_code      = "slb"
+  quota_action_code = "q_3mmbsp"
+  reason            = "Used to auto scaling kubernetes node pools"
+}
+resource "alicloud_quotas_quota_alarm" "slb-instances" {
+  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? 1 : 0
+  quota_alarm_name  = "slb-instances-for-kubernetes"
+  product_code      = "slb"
+  quota_action_code = "q_3mmbsp"
+  threshold         = data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2
+}
 
 data "alicloud_quotas_quotas" "eci" {
   product_code      = "ecs"

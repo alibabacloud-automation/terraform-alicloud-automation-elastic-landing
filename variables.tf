@@ -111,7 +111,7 @@ variable "kube_config_path" {
 variable "resource_group_id" {
   description = "The resource group id."
   type        = string
-  default     = "rg-acfmwvvtg5owavy"
+  default     = ""
 }
 variable "tags" {
   description = "The resource tags"
