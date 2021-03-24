@@ -80,13 +80,13 @@ resource "alicloud_quotas_quota_application" "slb-instances" {
   quota_action_code = "q_3mmbsp"
   reason            = "Used to auto scaling kubernetes node pools"
 }
-resource "alicloud_quotas_quota_alarm" "slb-instances" {
-  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? 1 : 0
-  quota_alarm_name  = "slb-instances-for-kubernetes"
-  product_code      = "slb"
-  quota_action_code = "q_3mmbsp"
-  threshold         = data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2
-}
+//resource "alicloud_quotas_quota_alarm" "slb-instances" {
+//  count             = length(data.alicloud_quotas_quotas.slb-instances.quotas) > 0 ? 1 : 0
+//  quota_alarm_name  = "slb-instances-for-kubernetes"
+//  product_code      = "slb"
+//  quota_action_code = "q_3mmbsp"
+//  threshold         = data.alicloud_quotas_quotas.slb-instances.quotas.0.total_quota / 2
+//}
 
 data "alicloud_quotas_quotas" "eci" {
   product_code      = "ecs"
