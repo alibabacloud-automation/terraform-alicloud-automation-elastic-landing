@@ -1,7 +1,3 @@
-provider "alicloud" {
-  region = var.region
-}
-
 module "kubernetes" {
   source                = "./infrastructure"
   region                = var.region

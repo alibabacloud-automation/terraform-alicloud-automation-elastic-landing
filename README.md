@@ -1,6 +1,5 @@
 Alibaba Cloud Terraform Module
 terraform-alicloud-automation-elastic-landing
-=====================================================================
 
 The module aims to build an automation elastic landing which 
 can be used to deploy k8s applications automatically. 
@@ -21,10 +20,6 @@ In order to make the landing can run and auto-scale successfully, the module als
 3. Adds quota [application](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/quotas_quota_application) to create apply for kubernetes cluster dependent resourcs quotas automatically when lacking quotas;
 4. Supports to create [reserved instance](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/reserved_instance) to retain some resource types.
 
-## Terraform versions
-
-This module requires Terraform 0.13.
-
 ## Usage
 
 ```hcl
@@ -42,16 +37,78 @@ module "landing" {
 }
 ```
 
-## Notes
-
 Running this module needs three steps:
 1. Running `terraform apply` command will create kubernetes cluster and install argocd and config argocd provider;
 2. Running `source .bash_profile` to make argocd provider setting affect;
 3. Running `terraform apply` command again to deploy application.
 
+## Notes
+From the version v1.1.0, the module has removed the following `provider` setting:
+
+```hcl
+provider "alicloud" {
+  region = var.region
+}
+```
+
+If you still want to use the `provider` setting to apply this module, you can specify a supported version, like 1.0.0:
+
+```hcl
+module "landing" {
+  source           = "terraform-alicloud-modules/automation-elastic-landing/alicloud"
+  version          = "1.0.0"
+  region           = "ap-southeast-1"
+  zone_ids         = ["ap-southeast-1a"]
+  application_path = "applications/appcenter/kustomize/base"
+  // ...
+}
+```
+
+If you want to upgrade the module to 1.1.0 or higher in-place, you can define a provider which same region with
+previous region:
+
+```hcl
+provider "alicloud" {
+  region = "ap-southeast-1"
+}
+module "landing" {
+  source           = "terraform-alicloud-modules/automation-elastic-landing/alicloud"
+  zone_ids         = ["ap-southeast-1a"]
+  application_path = "applications/appcenter/kustomize/base"
+  // ...
+}
+```
+or specify an alias provider with a defined region to the module using `providers`:
+
+```hcl
+provider "alicloud" {
+  region = "ap-southeast-1"
+  alias  = "as"
+}
+module "landing" {
+  source           = "terraform-alicloud-modules/automation-elastic-landing/alicloud"
+  providers        = {
+    alicloud = alicloud.as
+  }
+  zone_ids         = ["ap-southeast-1a"]
+  application_path = "applications/appcenter/kustomize/base"
+  // ...
+}
+```
+
+and then run `terraform init` and `terraform apply` to make the defined provider effect to the existing module state.
+
+More details see [How to use provider in the module](https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly)
+
+## Terraform versions
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+
 Authors
 -------
-Created and maintained by He Guimin(@xiaozhu36, heguimin36@163.com)
+Created and maintained by Alibaba Cloud Terraform Team(terraform@alibabacloud.com)
 
 License
 ----
