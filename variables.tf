@@ -1,5 +1,5 @@
 variable "region" {
-  description = "The region id in which kubernetes cluster. Recommand the international region because of needing loading application template from github."
+  description = "(Deprecated from version 1.1.0) The region id in which kubernetes cluster. Recommand the international region because of needing loading application template from github."
   type        = string
   default     = "ap-southeast-1"
 }
