@@ -1,3 +1,5 @@
+## [1.1.1](https://github.com/alibabacloud-automation/terraform-alicloud-automation-elastic-landing/compare/v1.1.0...v1.1.1) (2025-11-27)
+
 ## 1.2.0 (Unreleased)
 ## 1.1.0 (December 10, 2021)
 
